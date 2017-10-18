@@ -117,10 +117,10 @@ void backTracking(vvi grid, ii zeroPos, int steps, char lastMove, queue <char> q
     solved = true;
   }
   
-  if(steps < 10 && solved == false){
+  else if(steps < 46 && solved == false){
     if(lastMove == 'n'){                                                //lastMove = NULL -> First Move
-      steps++;                                                          //Tests respectively up, down, right, left  
-      if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', q);
+      steps++;                                                          //Tests respectively up, down, right, left 
+      if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', q); 
       if(zeroPos.first != 3) backTracking(moveDown(grid, zeroPos), newZeroDown(zeroPos), steps, 'D', q);
       if(zeroPos.second != 3) backTracking(moveRight(grid, zeroPos), newZeroRight(zeroPos), steps, 'R', q);
       if(zeroPos.second != 0) backTracking(moveLeft(grid, zeroPos), newZeroLeft(zeroPos), steps, 'L', q);
@@ -130,9 +130,9 @@ void backTracking(vvi grid, ii zeroPos, int steps, char lastMove, queue <char> q
       steps++;                                                          //Tests respectively up, right, left  
       queue <char> u = q;
       u.push('U');
-      if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', u);
       if(zeroPos.second != 3) backTracking(moveRight(grid, zeroPos), newZeroRight(zeroPos), steps, 'R', u);
       if(zeroPos.second != 0) backTracking(moveLeft(grid, zeroPos), newZeroLeft(zeroPos), steps, 'L', u);
+      if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', u);
     }
     
     if(lastMove == 'D'){                                                //lastMove = Down -> Can't go up
@@ -148,18 +148,18 @@ void backTracking(vvi grid, ii zeroPos, int steps, char lastMove, queue <char> q
       steps++;                                                          //Tests respectively up, down, right 
       queue <char> r = q;
       r.push('R');
-      if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', r);
       if(zeroPos.first != 3) backTracking(moveDown(grid, zeroPos), newZeroDown(zeroPos), steps, 'D', r);
       if(zeroPos.second != 3) backTracking(moveRight(grid, zeroPos), newZeroRight(zeroPos), steps, 'R', r);
+      if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', r);
     }
     
     if(lastMove == 'L'){                                                //lastMove = Left -> Can't go right
       steps++;                                                          //Tests respectively up, down, left  
       queue <char> l = q;
       l.push('L');
-      if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', l);
       if(zeroPos.first != 3) backTracking(moveDown(grid, zeroPos), newZeroDown(zeroPos), steps, 'D', l);
       if(zeroPos.second != 0) backTracking(moveLeft(grid, zeroPos), newZeroLeft(zeroPos), steps, 'L', l);
+      if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', l);
     }
   }
 }
