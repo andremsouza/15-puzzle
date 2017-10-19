@@ -1,4 +1,13 @@
+/*
+This program receives one or more 15-puzzle grids, and solves them using an A* approach.
+The input/output of this program is specified the UVA 10181 problem, plus the processing time.
+
+IMPORTANT: compile with the following command line:
+	g++ aStar.cpp -o aStar -O3 -Wall
+*/
+
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <queue>
 #include <cmath>
