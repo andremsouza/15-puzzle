@@ -91,7 +91,7 @@ struct State{
 	vvi grid; // the current grid
 	int f; // The result of the heuristic, calculated at the constructor. Used in the priority_queue
 	string path; // The path from the initial state to this one.
-	State(vvi grid, string path) : grid(grid), path(path){ f = manhattan(grid) + path.size();}
+	State(vvi grid, string path) : grid(grid), path(path){ f = manhattan(grid) + path.size();} //constructor
 	bool operator>(const State &b) const{ return f > b.f;} //operator overload for the priority_queue
 	char prev(){ // The previous state direction, that is, "From the previous state, we went to R, L, D or U?"
 		if(path.size()) return *(path.end()-1);
@@ -139,35 +139,35 @@ Best-case:
 */
 string solve(pqs &pq){
 	while(!pq.empty()){
-		State s = pq.top(); pq.pop();
-		if(isSolved(s.grid) && s.path.size() <= 50) return s.path;
+		State s = pq.top(); pq.pop(); //dequeue state
+		if(isSolved(s.grid) && s.path.size() <= 50) return s.path; //if solved and path found is below 50 steps
 		ii zero = findPosition(s.grid, 0);
 		//up
 		if(zero.first > 0 && s.prev() != 'D'){ //does not enqueue previous state
 			vvi ng = s.grid; swap(ng[zero.first][zero.second], ng[zero.first-1][zero.second]); // "moves" blank
 			State ns(ng, s.path + 'U'); // new state
-			pq.push(ns);
+			pq.push(ns); //enqueue new state
 		}
 		//down
 		if(zero.first < 3 && s.prev() != 'U'){
-			vvi ng = s.grid; swap(ng[zero.first][zero.second], ng[zero.first+1][zero.second]); // "moves" blank
-			State ns(ng, s.path + 'D'); // new state
+			vvi ng = s.grid; swap(ng[zero.first][zero.second], ng[zero.first+1][zero.second]);
+			State ns(ng, s.path + 'D');
 			pq.push(ns);
 		}
 		//left
 		if(zero.second > 0 && s.prev() != 'R'){
-			vvi ng = s.grid; swap(ng[zero.first][zero.second], ng[zero.first][zero.second-1]); // "moves" blank
-			State ns(ng, s.path + 'L'); // new state
+			vvi ng = s.grid; swap(ng[zero.first][zero.second], ng[zero.first][zero.second-1]);
+			State ns(ng, s.path + 'L');
 			pq.push(ns);
 		}
 		//right
 		if(zero.second < 3 && s.prev() != 'L'){
-			vvi ng = s.grid; swap(ng[zero.first][zero.second], ng[zero.first][zero.second+1]); // "moves" blank
-			State ns(ng, s.path + 'R'); // new state
+			vvi ng = s.grid; swap(ng[zero.first][zero.second], ng[zero.first][zero.second+1]);
+			State ns(ng, s.path + 'R');
 			pq.push(ns);
 		}
 	}
-	return "INVALID RESULT"; //Should not reach this point
+	return "This puzzle is not solvable."; //Should not reach this point
 }
 
 int main(int argc, char** argv){
@@ -187,7 +187,7 @@ int main(int argc, char** argv){
 		else{
 			State initial(grid, "");
 			pqs pq; pq.push(initial);
-			string solution = solve(pq);
+			string solution = solve(pq); //get solution
 			cout << solution << endl; //print solution, if found
 		}
 		//End timer and print time of this case
