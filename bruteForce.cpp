@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <vector>
 #include <queue>
+#include <ctime>
 
 using namespace std;
 
@@ -10,6 +11,48 @@ typedef vector<vi> vvi;
 typedef pair<int, int> ii;
 
 bool solved = false;
+
+/**
+ * Count number of inversions from the grid array
+ * */
+int inversionCount(vi f){
+	int result = 0;
+	for(int i=0; i<16; i++)
+		for(int j=i+1; j<16; j++){
+			if (f[i] == 0 || f[j] == 0) continue;
+			if (f[i] > f[j]) result++;
+		}
+	return result;
+}
+
+/**
+ * find coordinates of c in the grid
+ * */
+ii findPosition(vvi grid, int c){
+	for(int i=0; i<4; i++)
+		for(int j=0; j<4; j++)
+			if (grid[i][j] == c) return make_pair(i,j);
+	return make_pair(-1, -1); //not found
+}
+
+/**
+ * is solvable if:
+ * 	(1) the blank is on an even row counting from the bottom (second-last, fourth-last, etc.) and number of inversions is odd.
+ *  or
+ *  (2) the blank is on an odd row counting from the bottom (last, third-last, fifth-last, etc.) and number of inversions is even.
+ *  else not solvable
+ * */
+bool isSolvable(vvi grid){
+	vi f(16, 0);
+	for(int i=0; i<4; i++)
+		for(int j=0; j<4; j++)
+			f[i*4+j] = grid[i][j]; //Transforms grid into an array
+	ii blank = findPosition(grid, 0);
+	int count = inversionCount(f);
+
+	if ((4 - blank.first) % 2 == 0) return count % 2 == 1; // (1)
+	return count % 2 == 0; // (2)
+}
 
 /**
  * Check if the grid is solved
@@ -117,7 +160,7 @@ void backTracking(vvi grid, ii zeroPos, int steps, char lastMove, queue <char> q
     solved = true;
   }
   
-  else if(steps < 46 && solved == false){
+  else if(steps < 51 && solved == false){
     if(lastMove == 'n'){                                                //lastMove = NULL -> First Move
       steps++;                                                          //Tests respectively up, down, right, left 
       if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', q); 
@@ -169,6 +212,7 @@ int main(int argc, char** argv) {
   queue <char> q;
   ii zeroPos;
   cin >> N;
+  
   while (N--){
     vvi grid(4, vi(4));                                                 //input of each set
     for (int i = 0; i < 4; i++){
@@ -181,8 +225,8 @@ int main(int argc, char** argv) {
       }
     }
     solved = false;
-    backTracking(grid, zeroPos, 0, 'n', q);
-    if(solved == false) cout << "This puzzle is not solvable.\n";
+    if(isSolvable(grid)) backTracking(grid, zeroPos, 0, 'n', q);
+    else cout << "This puzzle is not solvable.\n";
   }
   return 0;
 }
