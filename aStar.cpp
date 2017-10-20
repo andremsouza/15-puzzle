@@ -103,13 +103,47 @@ struct State{
 typedef priority_queue<State, vector<State>, greater<State> > pqs;
 
 //Solve the solution with an A* algorithm, with the manhattan priority function
-string solve_r(pqs &pq){
+/*
+Complexity:
+
+*Be n the number of moves from the initial state to the solution state.
+
+Worst-case:
+	S(n) = 3*S(n-1) + C
+	S(0) = C
+
+	S(n-1) = 3*S(n-2) + C
+		=> S(n) = 3*(3*S(n-2) + C) + C = 3^2 * S(n-2) + (3^0 + 3^1)*C
+	S(n-2) = 3*S(n-3) + C
+		=> S(n) = 3^2*(3*S(n-3)+c) + (3^0 + 3^1)*C = 3^3*S(n-3) + (3^0 + 3^1 + 3^2)C
+	By mathematical induction:
+		S(n) = 3^(n+1)*S(0) + sum(i=0..n)(3^i) * C
+		S(n) = 1/2 * C * (3^(n+1) - 1)
+	Therefore, we have the following complexity:
+		O(3^n)
+
+Best-case:
+	If the heuristic makes the best decision making to the solution "without backtracking", we have:
+	S(n) = S(n-1) + C
+	S(0) = C
+
+	S(n-1) = S(n-2) + C
+		=> S(n) = S(n-2) + 2C
+	S(n-2) = S(n-3) + C
+		=> S(n) = S(n-3) + 3C
+	By mathematical induction:
+		S(n) = S(0) + n*C = C + n*c
+		=> S(n) = C*(n+1)
+	Therefore, we have the following complexity:
+		O(n)
+*/
+string solve(pqs &pq){
 	while(!pq.empty()){
 		State s = pq.top(); pq.pop();
 		if(isSolved(s.grid) && s.path.size() <= 50) return s.path;
 		ii zero = findPosition(s.grid, 0);
 		//up
-		if(zero.first > 0 && s.prev() != 'D'){
+		if(zero.first > 0 && s.prev() != 'D'){ //does not enqueue previous state
 			vvi ng = s.grid; swap(ng[zero.first][zero.second], ng[zero.first-1][zero.second]); // "moves" blank
 			State ns(ng, s.path + 'U'); // new state
 			pq.push(ns);
@@ -153,7 +187,7 @@ int main(int argc, char** argv){
 		else{
 			State initial(grid, "");
 			pqs pq; pq.push(initial);
-			string solution = solve_r(pq);
+			string solution = solve(pq);
 			cout << solution << endl; //print solution, if found
 		}
 		//End timer and print time of this case
