@@ -2,7 +2,6 @@
 #include <cstdio>
 #include <vector>
 #include <queue>
-#include <ctime>
 
 using namespace std;
 
@@ -53,6 +52,8 @@ bool isSolvable(vvi grid){
 	if ((4 - blank.first) % 2 == 0) return count % 2 == 1; // (1)
 	return count % 2 == 0; // (2)
 }
+
+
 
 /**
  * Check if the grid is solved
@@ -160,7 +161,7 @@ void backTracking(vvi grid, ii zeroPos, int steps, char lastMove, queue <char> q
     solved = true;
   }
   
-  else if(steps < 51 && solved == false){
+  else if(steps < 46 && solved == false){
     if(lastMove == 'n'){                                                //lastMove = NULL -> First Move
       steps++;                                                          //Tests respectively up, down, right, left 
       if(zeroPos.first != 0) backTracking(moveUp(grid, zeroPos), newZeroUp(zeroPos), steps, 'U', q); 
@@ -212,7 +213,6 @@ int main(int argc, char** argv) {
   queue <char> q;
   ii zeroPos;
   cin >> N;
-  
   while (N--){
     vvi grid(4, vi(4));                                                 //input of each set
     for (int i = 0; i < 4; i++){
@@ -230,4 +230,3 @@ int main(int argc, char** argv) {
   }
   return 0;
 }
-
