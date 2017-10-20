@@ -89,7 +89,7 @@ Below are the functions and classes used to calculate the solution.
 //A state of the puzzle.
 struct State{
 	vvi grid; // the current grid
-	int f; // The result of the A* heuristic, calculated at the constructor. Used in the priority_queue
+	int f; // The result of the heuristic, calculated at the constructor. Used in the priority_queue
 	string path; // The path from the initial state to this one.
 	State(vvi grid, string path) : grid(grid), path(path){ f = manhattan(grid) + path.size();}
 	bool operator>(const State &b) const{ return f > b.f;} //operator overload for the priority_queue
@@ -139,7 +139,7 @@ string solve_r(pqs &pq){
 int main(int argc, char** argv){
 	mountSolvedGrid();
 	int N; cin >> N; //number of sets
-	clock_t totalT=0; //total processing time
+		clock_t totalT=0; //total processing time
 	while (N--) {
 		//input of each set
 		vvi grid(4, vi(4));
